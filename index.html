@@ -1,239 +1,671 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sridhar P | Portfolio</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-          },
-          colors: {
-            primary: '#2563eb',
-            accent: '#1e3a8a'
-          }
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sridhar P | Portfolio</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: { sans: ['Inter', 'sans-serif'] },
+      colors: {
+        primary: '#2563eb',
+        accent: '#1e3a8a'
       }
     }
-  </script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  }
+}
+</script>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+
+<style>
+html.lenis { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+body {
+  overflow-x: hidden;
+  cursor: none;
+  background-color: #f8fafc;
+}
+
+/* ================= TEXTURE UPGRADE (OPTIMIZED) ================= */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  pointer-events: none;
+  opacity: 0.35;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+/* ================= GLOBAL BACKGROUND ================= */
+.global-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -3;
+  background:
+    radial-gradient(circle at 15% 15%, rgba(37,99,235,.18), transparent 40%),
+    radial-gradient(circle at 85% 30%, rgba(30,58,138,.15), transparent 45%),
+    linear-gradient(120deg, #f8fafc, #eef2ff);
+}
+
+/* FLOATING BLOBS (GPU ACCELERATED) */
+.blob {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.35;
+  z-index: -2;
+  will-change: transform;
+}
+
+.blob-1 { width: 420px; height: 420px; background: #2563eb; top: 10%; left: 5%; }
+.blob-2 { width: 520px; height: 520px; background: #1e3a8a; bottom: 10%; right: 5%; }
+
+/* ================= GRID BACKGROUND ================= */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(0,0,0,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,.04) 1px, transparent 1px);
+  background-size: 42px 42px;
+}
+
+/* ================= GLASS ================= */
+.glass {
+  background: rgba(255,255,255,0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.6);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* ================= CARDS ================= */
+.card {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* ================= CUSTOM CURSOR ================= */
+.cursor-dot, .cursor-ring {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  will-change: top, left, transform;
+}
+.cursor-dot { width: 8px; height: 8px; background: #2563eb; border-radius: 50%; }
+.cursor-ring { width: 36px; height: 36px; border: 2px solid rgba(37,99,235,.4); border-radius: 50%; }
+.cursor-hover .cursor-ring { transform: scale(1.7); border-color: rgba(37,99,235,.8); background: rgba(37,99,235, 0.1); }
+
+/* ================= UTILS ================= */
+.magnet { display: inline-block; }
+.nav-link { position: relative; color: #4b5563; transition: color 0.3s ease; }
+.nav-link:hover { color: #2563eb; }
+.nav-link::after {
+  content: ''; position: absolute; bottom: -4px; left: 0; width: 0%; height: 2px;
+  background: #2563eb; transition: width 0.3s ease; border-radius: 99px;
+}
+.nav-link:hover::after { width: 100%; }
+
+</style>
 </head>
-<body class="font-sans bg-gradient-to-br from-blue-50 to-white text-gray-800 scroll-smooth">
 
-  <!-- Header -->
-  <header class="bg-white/80 backdrop-blur sticky top-0 shadow-md z-10">
-    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-      <h1 class="text-2xl font-bold" style="color: #3498db;">Sridhar P</h1>
-      <nav class="space-x-6">
-        <a href="#about" class="hover:text-primary transition">About</a>
-        <a href="#projects" class="hover:text-blue-400">Projects</a>
-        <a href="#contact" class="hover:text-primary transition">Contact</a>
-      </nav>
-    </div>
-  </header>
+<body class="font-sans text-gray-900 selection:bg-primary selection:text-white">
 
-  <!-- Hero -->
-  <section class="text-center py-28 bg-gradient-to-r from-blue-100 to-blue-50">
-    <h2 class="text-5xl font-extrabold text-gray-900 mb-4 animate-fade-in">Hi There,</h2>
-    <h2 class="text-5xl font-extrabold text-gray-900 mb-4 animate-fade-in">I’m Sridhar P</h2>
-    <p class="text-xl text-gray-700 mb-6">Think. Build. Amaze.</p>
-    <a href="projects.html" class="bg-primary text-white px-8 py-3 rounded-full shadow hover:bg-accent transition duration-300">Explore Projects</a>
-    <div class="mt-8 flex justify-center">
-  <a href="assets/SridharResume.pdf" 
-     download
-     class="bg-[#1b2631] hover:bg-[#34495e] text-white px-6 py-3 rounded-full flex items-center gap-2 shadow-lg transition duration-300">
-     Download Resume!
-  </a>
-</div>
+<div class="grain-overlay"></div>
 
-  </section>
+<div class="global-bg"></div>
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
+<div id="progress" class="fixed top-0 left-0 h-1 bg-primary z-50"></div>
+<div id="home"></div>
 
-  <!-- About -->
-  <section id="about" class="max-w-4xl mx-auto px-6 py-20">
-    <h3 class="text-4xl font-bold mb-6 text-center">About Me</h3>
-    <p class="text-lg leading-relaxed text-center text-gray-700">
-      A passionate developer with a strong foundation in front-end technologies like HTML, CSS, and JavaScript, 
-      backed by solid backend experience using Python. Proficient in data analysis and visualization with libraries 
-      such as Pandas and Matplotlib. Skilled in SQL for effective database management, and quick to grasp complex codebases. 
-      Adaptable and always eager to learn new languages and frameworks.
+<nav class="fixed top-6 left-0 right-0 z-40 flex justify-center nav-container opacity-0">
+  <div class="glass px-6 py-3 rounded-full flex items-center gap-8 shadow-xl shadow-blue-500/5 border border-white/60 bg-white/60 backdrop-blur-xl hover:scale-[1.02] transition-transform duration-300">
+      
+      <a href="#home" class="font-bold text-lg tracking-tight text-gray-900 flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+        Sridhar P
+      </a>
+      
+      <div class="hidden md:flex gap-6 text-sm font-medium">
+           <a href="#home" class="nav-link">Home</a>
+           <a href="#about" class="nav-link">About</a>
+           <a href="#skills" class="nav-link">Skills</a>
+           <a href="#experience" class="nav-link">Exp.</a>
+           <a href="#projects" class="nav-link">Projects</a>
+      </div>
+
+      <a href="#contact" class="hidden md:inline-block bg-gray-900 text-white px-5 py-2 rounded-full text-xs font-semibold hover:bg-blue-600 transition-colors shadow-lg shadow-gray-900/20">
+          Let's Talk
+      </a>
+
+      <button class="md:hidden text-gray-700">
+        <i class="fas fa-bars text-lg"></i>
+      </button>
+  </div>
+</nav>
+
+<section id="hero" class="grid-bg min-h-screen grid md:grid-cols-2 items-center px-6 md:px-20 relative pt-20">
+  <div class="z-10">
+    <h2 class="hero-title text-5xl md:text-7xl font-extrabold leading-[1.1] tracking-tight text-gray-900"></h2>
+    
+    <div class="hero-line w-0 h-2 bg-primary mt-6 mb-8 rounded-full"></div>
+
+    <p class="hero-sub text-lg md:text-xl text-gray-600 max-w-lg leading-relaxed opacity-0 translate-y-4">
+      I design and build expressive digital experiences with clean engineering
+      and thoughtful motion.
     </p>
-  </section>
 
-  <!-- Skills Section -->
-<section id="skills" style="background-color: #2e4053;" class="text-white py-20">
+    <div class="mt-10 flex flex-wrap gap-4 hero-btns opacity-0 translate-y-4">
+      <a href="projects.html" class="magnet bg-primary text-white px-8 py-3 rounded-full shadow hover:bg-blue-700 transition-colors">
+        View Projects
+      </a>
+      <a href="#" class="magnet glass-btn px-8 py-3 rounded-full border border-gray-200">
+        Download Resume
+      </a>
+    </div>
+  </div>
+
+  <div class="relative hidden md:block perspective-container">
+    <div class="glass rounded-3xl p-8 shadow-2xl card relative overflow-hidden hero-card opacity-0 group border border-white/50">
+      
+      <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-indigo-600"></div>
+
+      <div class="flex justify-center mb-6 relative">
+        <div class="relative w-28 h-28 p-1 rounded-full border-2 border-dashed border-blue-400/50">
+           <img src="https://ui-avatars.com/api/?name=Sridhar+P&background=2563eb&color=fff&size=150" 
+                alt="Profile" 
+                class="w-full h-full rounded-full object-cover shadow-md">
+           <div class="absolute bottom-1 right-1 w-5 h-5 bg-green-500 border-2 border-white rounded-full"></div>
+        </div>
+      </div>
+
+      <div class="text-center mb-6">
+        <h3 class="text-2xl font-bold text-gray-900">Sridhar P</h3>
+        <span class="inline-block px-3 py-1 mt-2 text-xs font-bold text-blue-700 bg-blue-50 rounded-full border border-blue-100 uppercase tracking-wide">
+          Developer
+        </span>
+      </div>
+
+      <div class="relative bg-white/40 rounded-xl p-4 mb-6 border border-white/40">
+        <i class="fas fa-quote-left text-blue-200 absolute -top-2 -left-2 text-xl"></i>
+        <p class="text-sm text-gray-600 leading-relaxed italic text-center">
+          “Like Ilaiyaraaja’s melodies or Kamal’s frames, real impact lies in refining the craft.”
+        </p>
+      </div>
+
+      <div class="flex justify-between items-center pt-4 border-t border-gray-200/50 text-xs font-medium text-gray-500">
+        <div class="flex items-center gap-1">
+          <i class="fas fa-layer-group text-blue-500"></i> Full Stack
+        </div>
+        <div class="flex items-center gap-1">
+          <i class="fas fa-bolt text-yellow-500"></i> Motion
+        </div>
+        <div class="flex items-center gap-1">
+          <i class="fas fa-code text-purple-500"></i> WebGL
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="about" class="section py-32 max-w-4xl mx-auto px-6 relative">
+  <div class="absolute -left-20 top-20 text-9xl text-gray-100 font-bold -z-10 select-none">01</div>
+  <h3 class="text-4xl font-bold mb-6">About Me</h3>
+  <p class="text-gray-600 text-xl leading-relaxed">
+    A versatile developer specializing in cross-platform experiences. 
+    I build high-performance mobile and web applications using Flutter and modern frameworks like React, backed by robust serverless 
+    architectures like Firebase. Beyond the interface, I bring strong backend logic with Python and turn complex datasets into actionable 
+    insights using Pandas. I thrive on complexity quickly mastering new tools and deconstructing codebases to ship scalable software.
+  </p>
+</section>
+
+<section class="section py-32 bg-[#0f172a] text-white relative overflow-hidden">
+  <div class="absolute inset-0 opacity-10" 
+       style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 30px 30px;">
+  </div>
+
+  <div class="max-w-7xl mx-auto px-6 relative z-10">
+    <h3 class="text-4xl font-bold text-center mb-16">What I Do</h3>
+
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="glass p-8 rounded-2xl text-center card border-white/10 bg-white/5 hover-trigger">
+        <div class="w-16 h-16 mx-auto bg-blue-500/20 rounded-full flex items-center justify-center mb-6 text-blue-400">
+          <i class="fas fa-code text-2xl"></i>
+        </div>
+        <h4 class="font-semibold text-xl mb-3">Frontend Engineering</h4>
+        <p class="text-sm text-gray-400 leading-relaxed">Creating scalable, responsive, and accessible UI components.</p>
+      </div>
+
+      <div class="glass p-8 rounded-2xl text-center card border-white/10 bg-white/5 hover-trigger">
+        <div class="w-16 h-16 mx-auto bg-purple-500/20 rounded-full flex items-center justify-center mb-6 text-purple-400">
+          <i class="fas fa-database text-2xl"></i>
+        </div>
+        <h4 class="font-semibold text-xl mb-3">Backend & Data</h4>
+        <p class="text-sm text-gray-400 leading-relaxed">Robust APIs, database architecture, and data visualization.</p>
+      </div>
+
+      <div class="glass p-8 rounded-2xl text-center card border-white/10 bg-white/5 hover-trigger">
+        <div class="w-16 h-16 mx-auto bg-pink-500/20 rounded-full flex items-center justify-center mb-6 text-pink-400">
+          <i class="fas fa-bolt text-2xl"></i>
+        </div>
+        <h4 class="font-semibold text-xl mb-3">Creative Motion</h4>
+        <p class="text-sm text-gray-400 leading-relaxed">Interaction design that guides the user and adds delight.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills" class="section py-32 bg-white relative">
   <div class="max-w-6xl mx-auto px-6">
-    <h3 class="text-4xl font-bold mb-10 text-center text-white">SKILLS</h3>
+    <h3 class="text-4xl font-bold text-center mb-16">Technical Arsenal</h3>
 
-    <div class="grid md:grid-cols-4 sm:grid-cols-2 gap-6">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 skill-grid">
+      <div class="skill-item glass p-6 rounded-xl text-center card font-semibold text-gray-700">MongoDB</div>
+      <div class="skill-item glass p-6 rounded-xl text-center card font-semibold text-gray-700">Express</div>
+      <div class="skill-item glass p-6 rounded-xl text-center card font-semibold text-gray-700">ReactJS</div>
+      <div class="skill-item glass p-6 rounded-xl text-center card font-semibold text-gray-700">NodeJS</div>
+      <div class="skill-item glass p-6 rounded-xl text-center card font-semibold text-gray-700">Flutter</div>
+      <div class="skill-item glass p-6 rounded-xl text-center card font-semibold text-gray-700">Firebase</div>
+      <div class="skill-item glass p-6 rounded-xl text-center card font-semibold text-gray-700">NextJS</div>
+      <div class="skill-item glass p-6 rounded-xl text-center card font-semibold text-gray-700">VueJS</div>
+      <div class="skill-item glass p-6 rounded-xl text-center card font-semibold text-gray-700">Python</div>
+      <div class="skill-item glass p-6 rounded-xl text-center card font-semibold text-gray-700">SQL</div>
+      <div class="skill-item glass p-6 rounded-xl text-center card font-semibold text-gray-700">Anime.js</div>
+      <div class="skill-item glass p-6 rounded-xl text-center card font-semibold text-gray-700">Git</div>
+      <div class="skill-item glass p-6 rounded-xl text-center card font-semibold text-gray-700">HTML</div>      
+      <div class="skill-item glass p-6 rounded-xl text-center card font-semibold text-gray-700">CSS • Tailwindcss</div>
+      <div class="skill-item glass p-6 rounded-xl text-center card font-semibold text-gray-700">Seaborn</div>
+      <div class="skill-item glass p-6 rounded-xl text-center card font-semibold text-gray-700">PowerBI</div>
+    </div>
+  </div>
+</section>
 
-      <!-- Skill Box -->
-      <div class="rounded-xl p-5 shadow text-center transition duration-300" 
-           style="background-color: #34495e;" 
-           onmouseover="this.style.backgroundColor='#1b2631'" 
-           onmouseout="this.style.backgroundColor='#34495e'">
-        <p class="font-semibold text-lg">HTML</p>
+<section id="experience" class="section py-32 bg-gray-50/50 relative overflow-hidden">
+  <div class="max-w-6xl mx-auto px-6 relative z-10">
+     
+    <div class="grid md:grid-cols-2 gap-16">
+      
+      <div>
+        <h3 class="text-3xl font-bold mb-10 flex items-center gap-3 text-gray-800">
+           <span class="w-8 h-1.5 bg-blue-500 rounded-full"></span> Experience
+        </h3>
+        
+        <div class="space-y-8 border-l-2 border-gray-200 pl-8 relative ml-3">
+           <div class="glass p-8 rounded-2xl relative hover-trigger bg-white/60">
+              <span class="absolute -left-[43px] top-8 w-5 h-5 bg-blue-500 rounded-full border-4 border-gray-50 shadow-sm"></span>
+              
+              <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-2">
+                 <h4 class="text-xl font-bold text-gray-900">Software Intern</h4>
+                 <span class="text-xs font-mono text-blue-600 bg-blue-100 px-2 py-1 rounded border border-blue-200 w-fit mt-2 sm:mt-0">2025 - Present</span>
+              </div>
+              
+              <p class="text-sm font-semibold text-gray-500 mb-4">CodeWork.ai • Chennai</p>
+              
+              <ul class="text-sm text-gray-600 space-y-2 list-disc list-inside">
+                 <li>Developed Mobile Application using Flutter and Firebase</li>
+                 <li>Developed responsive dashboards using React & Tailwind.</li>
+                 <li>Worked on website development and integration of chatbots.</li>
+              </ul>
+           </div>
+            <div class="glass p-8 rounded-2xl relative hover-trigger bg-white/60">
+              <span class="absolute -left-[43px] top-8 w-5 h-5 bg-gray-300 rounded-full border-4 border-gray-50 shadow-sm"></span>
+              
+              <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-2">
+                 <h4 class="text-xl font-bold text-gray-900">Web Dev Trainee</h4>
+                 <span class="text-xs font-mono text-gray-500 bg-gray-100 px-2 py-1 rounded border border-gray-200 w-fit mt-2 sm:mt-0">2023 - 2024</span>
+              </div>
+              
+              <p class="text-sm font-semibold text-gray-500 mb-4">StartupHub • Remote</p>
+              
+              <ul class="text-sm text-gray-600 space-y-2 list-disc list-inside">
+                 <li>Assisted in building UI components for the main product.</li>
+                 <li>Collaborated with the design team to implement Figma designs.</li>
+              </ul>
+           </div>
+        </div>
       </div>
 
-      <div class="rounded-xl p-5 shadow text-center transition duration-300" 
-           style="background-color: #34495e;" 
-           onmouseover="this.style.backgroundColor='#1b2631'" 
-           onmouseout="this.style.backgroundColor='#34495e'">
-        <p class="font-semibold text-lg">CSS</p>
-      </div>
+      <div>
+        <h3 class="text-3xl font-bold mb-10 flex items-center gap-3 text-gray-800">
+           <span class="w-8 h-1.5 bg-yellow-500 rounded-full"></span> Achievements
+        </h3>
+        
+        <div class="grid gap-6">
+           <div class="glass p-6 rounded-2xl flex items-center gap-5 hover-trigger bg-white/60 border-l-4 border-yellow-400">
+              <div class="w-14 h-14 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 shadow-inner shrink-0">
+                 <i class="fas fa-trophy text-xl"></i>
+              </div>
+              <div>
+                 <h4 class="font-bold text-lg text-gray-900">Participated in Hackathons</h4>
+                 <p class="text-sm text-gray-500 font-medium">College level 2023 - 2025</p>
+                 <p class="text-xs text-gray-400 mt-1">Brainstormed and collaborated on innovative solutions.</p>
+              </div>
+           </div>
 
-      <div class="rounded-xl p-5 shadow text-center transition duration-300" 
-           style="background-color: #34495e;" 
-           onmouseover="this.style.backgroundColor='#1b2631'" 
-           onmouseout="this.style.backgroundColor='#34495e'">
-        <p class="font-semibold text-lg">JavaScript</p>
-      </div>
+           <div class="glass p-6 rounded-2xl flex items-center gap-5 hover-trigger bg-white/60 border-l-4 border-blue-400">
+              <div class="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 shadow-inner shrink-0">
+                 <i class="fas fa-certificate text-xl"></i>
+              </div>
+              <div>
+                 <h4 class="font-bold text-lg text-gray-900">AWS Certified</h4>
+                 <p class="text-sm text-gray-500 font-medium">Cloud Practitioner</p>
+                 <p class="text-xs text-gray-400 mt-1">Validated expertise in cloud infrastructure.</p>
+              </div>
+           </div>
 
-      <div class="rounded-xl p-5 shadow text-center transition duration-300" 
-           style="background-color: #34495e;" 
-           onmouseover="this.style.backgroundColor='#1b2631'" 
-           onmouseout="this.style.backgroundColor='#34495e'">
-        <p class="font-semibold text-lg">Python</p>
-      </div>
-
-      <div class="rounded-xl p-5 shadow text-center transition duration-300" 
-           style="background-color: #34495e;" 
-           onmouseover="this.style.backgroundColor='#1b2631'" 
-           onmouseout="this.style.backgroundColor='#34495e'">
-        <p class="font-semibold text-lg">Pandas</p>
-      </div>
-
-      <div class="rounded-xl p-5 shadow text-center transition duration-300" 
-           style="background-color: #34495e;" 
-           onmouseover="this.style.backgroundColor='#1b2631'" 
-           onmouseout="this.style.backgroundColor='#34495e'">
-        <p class="font-semibold text-lg">Matplotlib</p>
-      </div>
-
-      <div class="rounded-xl p-5 shadow text-center transition duration-300" 
-           style="background-color: #34495e;" 
-           onmouseover="this.style.backgroundColor='#1b2631'" 
-           onmouseout="this.style.backgroundColor='#34495e'">
-        <p class="font-semibold text-lg">SQL</p>
-      </div>
-
-      <div class="rounded-xl p-5 shadow text-center transition duration-300" 
-           style="background-color: #34495e;" 
-           onmouseover="this.style.backgroundColor='#1b2631'" 
-           onmouseout="this.style.backgroundColor='#34495e'">
-        <p class="font-semibold text-lg">REACT</p>
+           <div class="glass p-6 rounded-2xl flex items-center gap-5 hover-trigger bg-white/60 border-l-4 border-purple-400">
+              <div class="w-14 h-14 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 shadow-inner shrink-0">
+                 <i class="fas fa-star text-xl"></i>
+              </div>
+              <div>
+                 <h4 class="font-bold text-lg text-gray-900">Open Source Contributor</h4>
+                 <p class="text-sm text-gray-500 font-medium">React Native Community</p>
+                 <p class="text-xs text-gray-400 mt-1">Merged 3 PRs optimizing list rendering.</p>
+              </div>
+           </div>
+        </div>
       </div>
 
     </div>
   </div>
 </section>
-
-
-  <!-- Projects -->
-  <section id="projects" class="bg-white py-20">
+<section id="projects" class="section py-32 bg-gray-50">
   <div class="max-w-6xl mx-auto px-6">
-    <h3 class="text-4xl font-bold mb-10 text-center">My Projects</h3>
+    <h3 class="text-4xl font-bold text-center mb-6">Selected Work</h3>
+    <p class="text-gray-600 text-center max-w-xl mx-auto mb-16">
+      A collection of experiments, products, and systems.
+    </p>
 
-    <div class="flex space-x-6 overflow-x-auto pb-4">
-      <!-- Project 1 -->
-      <div class="min-w-[300px] bg-blue-50 p-6 rounded-2xl shadow-lg hover:shadow-xl transition duration-300">
-        <h4 class="text-2xl font-semibold mb-2">📱 MoodMoji</h4>
-        <p class="text-gray-700">A mood tracking app that allows users to record daily feelings, view mood history by day/week/month, and export entries as a stylish PDF. Built with Firebase Auth + Firestore.</p>
+    <div class="grid md:grid-cols-3 gap-10">
+      <div class="card p-8 bg-white rounded-2xl shadow-lg border border-gray-100 hover-trigger group">
+        <div class="h-40 bg-blue-50 rounded-xl mb-6 flex items-center justify-center overflow-hidden relative">
+             <i class="fas fa-smile text-6xl text-blue-200 group-hover:scale-110 transition-transform duration-500"></i>
+        </div>
+        <span class="text-xs font-bold uppercase tracking-wide text-blue-600">Completed</span>
+        <h4 class="font-bold text-xl mt-3 mb-2">MoodMoji</h4>
+        <p class="text-sm text-gray-600 mb-4">Mood tracking analytics dashboard with PDF export functionality.</p>
       </div>
 
-      <!-- Project 2 -->
-      <div class="min-w-[300px] bg-blue-50 p-6 rounded-2xl shadow-lg hover:shadow-xl transition duration-300">
-        <h4 class="text-2xl font-semibold mb-2">📸 ProjectX</h4>
-        <p class="text-gray-700">A fieldwork documentation tool for engineers to capture photos, notes, GPS data, and export everything into a formal PDF. Used for site audits and reports.</p>
+      <div class="card p-8 bg-white rounded-2xl shadow-lg border border-gray-100 hover-trigger group">
+        <div class="h-40 bg-purple-50 rounded-xl mb-6 flex items-center justify-center overflow-hidden relative">
+             <i class="fas fa-building text-6xl text-purple-200 group-hover:scale-110 transition-transform duration-500"></i>
+        </div>
+        <span class="text-xs font-bold uppercase tracking-wide text-purple-600">Completed</span>
+        <h4 class="font-bold text-xl mt-3 mb-2">ProjectX</h4>
+        <p class="text-sm text-gray-600 mb-4">Construction site documentation system with real-time updates.</p>
       </div>
 
-      <!-- Project 3 -->
-      <div class="min-w-[300px] bg-blue-50 p-6 rounded-2xl shadow-lg hover:shadow-xl transition duration-300">
-        <h4 class="text-2xl font-semibold mb-2">🩺Doc's Code</h4>
-        <p class="text-gray-700">A medical records tool that simplifies patient data entry, tracks visit history, and generates clean prescriptions. Built for doctors with secure login and backup support.</p>
+      <div class="card p-8 bg-white rounded-2xl shadow-lg border border-gray-100 hover-trigger group">
+        <div class="h-40 bg-green-50 rounded-xl mb-6 flex items-center justify-center overflow-hidden relative">
+             <i class="fas fa-user-md text-6xl text-green-200 group-hover:scale-110 transition-transform duration-500"></i>
+        </div>
+        <span class="text-xs font-bold uppercase tracking-wide text-green-600">Completed</span>
+        <h4 class="font-bold text-xl mt-3 mb-2">Doc’s Code</h4>
+        <p class="text-sm text-gray-600 mb-4">Smart patient management platform for modern clinics.</p>
       </div>
+    </div>
+
+    <div class="mt-20 text-center">
+      <a href="projects.html"
+         class="magnet inline-flex items-center gap-3 bg-gray-900 text-white px-10 py-4 rounded-full shadow-xl hover:bg-black transition-colors">
+        View All Projects
+        <i class="fas fa-arrow-right text-sm"></i>
+      </a>
     </div>
   </div>
 </section>
 
+<section id="contact" class="section py-24 bg-[#0f172a] text-white text-center relative overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-t from-blue-900/20 to-transparent"></div>
+  <div class="relative z-10">
+    <h3 class="text-4xl font-bold mb-6">Let’s Connect</h3>
+    <p class="text-gray-400 mb-8 max-w-md mx-auto">Have a project in mind or just want to chat about tech? My inbox is always open.</p>
 
-  <!-- Contact Section -->
-<!-- Contact Section -->
-<section id="contact" class="py-20 bg-[#2e4053] text-white">
-  <div class="max-w-4xl mx-auto px-6">
-    <h3 class="text-4xl font-bold text-center mb-12">Get in Touch</h3>
+    <a href="mailto:sridhar.pan05@gmail.com"
+       class="magnet inline-block bg-primary text-white px-8 py-3 rounded-full mb-12 shadow-lg shadow-blue-900/50">
+      Email Me
+    </a>
 
-    <div class="bg-[#34495e] p-8 rounded-xl shadow-xl text-center">
-      <h4 class="text-2xl font-semibold mb-4">Let’s build, brainstorm, or just talk!</h4>
-      <p class="mb-8 text-gray-300 text-sm sm:text-base">Whether it’s an idea, collaboration, or just a hello — I’m always open to meaningful conversations.</p>
-
-      <!-- Contact Info -->
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 text-left mb-8">
-  <div class="flex items-center gap-4">
-    <i class="fas fa-envelope text-xl" style="color: #5792c3;"></i>
-    <div>
-      <p class="font-semibold text-gray-300">Email</p>
-      <p class="text-white text-sm">
-        <a href="mailto:sridhar.pan05@gmail.com">sridhar.pan05@gmail.com</a>
-      </p>
-    </div>
-  </div>
-  <div class="flex items-center gap-4">
-    <i class="fas fa-phone text-xl" style="color: #5792c3;"></i>
-    <div>
-      <p class="font-semibold text-gray-300">Phone</p>
-      <p class="text-white text-sm">+91 63804 31482</p>
-    </div>
-  </div>
-  <div class="flex items-center gap-4">
-    <i class="fas fa-map-marker-alt text-xl" style="color: #5792c3;"></i>
-    <div>
-      <p class="font-semibold text-gray-300">Location</p>
-      <p class="text-white text-sm">Chennai, India</p>
-    </div>
-  </div>
-</div>
-
-
-      <!-- Social Links -->
-      <div class="flex justify-center gap-6 mb-6">
-        <a href="https://github.com/sridharpandiarajan" target="_blank" class="hover:text-blue-400 transition">
-          <i class="fab fa-github fa-xl"></i>
-        </a>
-        <a href="https://www.linkedin.com/in/sridharpan/" target="_blank" class="hover:text-blue-400 transition">
-          <i class="fab fa-linkedin fa-xl"></i>
-        </a>
-        <a href="https://instagram.com/sridharpandiarajan" target="_blank" class="hover:text-pink-400 transition">
-          <i class="fab fa-instagram fa-xl"></i>
-        </a>
-      </div>
-
-      <hr class="my-6 border-gray-600">
-      <p class="italic text-sm text-gray-300">“Curiosity started it. Consistency keeps it alive.”</p>
+    <div class="flex justify-center gap-10">
+      <a href="https://github.com/sridharpandiarajan" target="_blank" class="text-gray-400 hover:text-white transition-colors transform hover:-translate-y-1"><i class="fab fa-github fa-2xl"></i></a>
+      <a href="https://www.linkedin.com/in/sridharpan/" target="_blank" class="text-gray-400 hover:text-white transition-colors transform hover:-translate-y-1"><i class="fab fa-linkedin fa-2xl"></i></a>
+      <a href="https://instagram.com/sridharpandiarajan" target="_blank" class="text-gray-400 hover:text-white transition-colors transform hover:-translate-y-1"><i class="fab fa-instagram fa-2xl"></i></a>
     </div>
   </div>
 </section>
 
+<footer class="py-8 text-center text-sm text-gray-500 bg-gray-50">
+  © 2025 Sridhar P
+</footer>
 
-  <!-- Footer -->
-  <footer class="bg-gray-800 text-white py-6 text-center">
-    <p>&copy; 2025 Sridhar P</p>
-  </footer>
+<script>
+/* =================================================================
+   1. LENIS SMOOTH SCROLL (The magic fix for scrolling)
+   =================================================================
+*/
+const lenis = new Lenis({
+  duration: 1.2,
+  easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+  direction: 'vertical',
+  gestureDirection: 'vertical',
+  smooth: true,
+  mouseMultiplier: 1,
+  smoothTouch: false,
+  touchMultiplier: 2,
+});
 
-  <!-- Animation (Optional, pure CSS) -->
-  <style>
-    @keyframes fade-in {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+function raf(time) {
+  lenis.raf(time);
+  requestAnimationFrame(raf);
+}
+
+requestAnimationFrame(raf);
+
+/* 2. ANIMATIONS */
+
+/* HERO TEXT REVEAL */
+const text = "Hi, I’m Sridhar P";
+const heroTitle = document.querySelector('.hero-title');
+
+heroTitle.innerHTML = text.split('').map(l => 
+    l === ' ' ? `<span style="display:inline-block;width:.3em"></span>` : `<span style="display:inline-block; opacity:0">${l}</span>`
+).join('');
+
+var tl = anime.timeline({
+  easing: 'easeOutExpo',
+  duration: 1000
+});
+
+// Reveal Sequence
+tl
+.add({
+  targets: '.nav-container',
+  opacity: [0, 1],
+  translateY: [-20, 0],
+  duration: 800
+})
+.add({
+  targets: '.hero-title span',
+  opacity: [0, 1],
+  translateY: [50, 0],
+  rotateX: [90, 0],
+  delay: anime.stagger(50),
+}, '-=600')
+.add({
+  targets: '.hero-line',
+  width: ['0px', '120px'],
+  duration: 800
+}, '-=600')
+.add({
+  targets: ['.hero-sub', '.hero-btns'],
+  opacity: [0, 1],
+  translateY: [20, 0],
+  delay: anime.stagger(200)
+}, '-=600')
+.add({
+  targets: '.hero-card',
+  opacity: [0, 1],
+  scale: [0.9, 1],
+  rotateY: [15, 0],
+  duration: 1200
+}, '-=800');
+
+/* ELASTIC CARD HOVER */
+document.querySelectorAll('.hover-trigger').forEach(card => {
+  card.addEventListener('mouseenter', () => {
+    anime.remove(card);
+    anime({
+      targets: card,
+      scale: 1.05,
+      translateY: -10,
+      boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+      duration: 800,
+      easing: 'easeOutElastic(1, .6)'
+    });
+  });
+  card.addEventListener('mouseleave', () => {
+    anime.remove(card);
+    anime({
+      targets: card,
+      scale: 1,
+      translateY: 0,
+      boxShadow: '0 0px 0px 0px rgba(0, 0, 0, 0)',
+      duration: 600,
+      easing: 'easeOutElastic(1, .5)'
+    });
+  });
+});
+
+/* STAGGERED SKILLS GRID */
+const skillsObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      anime({
+        targets: '.skill-item',
+        opacity: [0, 1],
+        scale: [0.5, 1],
+        delay: anime.stagger(100, {grid: [4, 2], from: 'center'}),
+        easing: 'easeOutElastic(1, .5)'
+      });
+      skillsObserver.unobserve(entry.target);
     }
-    .animate-fade-in {
-      animation: fade-in 1.2s ease-out both;
-    }
-  </style>
+  });
+}, { threshold: 0.3 });
 
+const skillsSection = document.querySelector('#skills');
+if(skillsSection) skillsObserver.observe(skillsSection);
+
+
+/* STANDARD SECTION REVEAL */
+const sectionObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      anime({
+        targets: e.target,
+        opacity: [0, 1],
+        translateY: [60, 0],
+        duration: 1000,
+        easing: 'easeOutQuint'
+      });
+      sectionObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.section h3, .section p').forEach(el => {
+  el.style.opacity = 0;
+  sectionObserver.observe(el);
+});
+
+/* CUSTOM CURSOR & MAGNETS */
+const dot = document.querySelector('.cursor-dot');
+const ring = document.querySelector('.cursor-ring');
+
+document.addEventListener('mousemove', e => {
+  dot.style.left = `${e.clientX}px`;
+  dot.style.top = `${e.clientY}px`;
+  anime({
+    targets: ring,
+    left: e.clientX - 18,
+    top: e.clientY - 18,
+    duration: 150,
+    easing: 'easeOutQuad'
+  });
+});
+
+document.querySelectorAll('a, button, .card').forEach(el => {
+  el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+  el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+});
+
+document.querySelectorAll('.magnet').forEach(btn => {
+  btn.addEventListener('mousemove', e => {
+    const r = btn.getBoundingClientRect();
+    const x = e.clientX - r.left - r.width / 2;
+    const y = e.clientY - r.top - r.height / 2;
+    anime({
+      targets: btn,
+      translateX: x * 0.3,
+      translateY: y * 0.3,
+      duration: 100,
+      easing: 'linear'
+    });
+  });
+  btn.addEventListener('mouseleave', () => {
+    anime({
+      targets: btn,
+      translateX: 0,
+      translateY: 0,
+      duration: 1000,
+      easing: 'easeOutElastic(1, .5)'
+    });
+  });
+});
+
+/* FLOATING BLOBS */
+anime({
+  targets: '.blob-1',
+  translateY: [0, 50],
+  translateX: [0, 30],
+  scale: [1, 1.1],
+  direction: 'alternate',
+  loop: true,
+  easing: 'easeInOutSine',
+  duration: 8000
+});
+
+anime({
+  targets: '.blob-2',
+  translateY: [0, -60],
+  translateX: [0, -40],
+  scale: [1, 1.2],
+  direction: 'alternate',
+  loop: true,
+  easing: 'easeInOutSine',
+  duration: 10000
+});
+
+/* SCROLL PROGRESS */
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const scroll = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  document.getElementById('progress').style.width = scroll + '%';
+});
+
+</script>
 </body>
 </html>

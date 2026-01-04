@@ -1,74 +1,452 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Projects | Sridhar P</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>.tech-stack {
-  color: rgba(255, 255, 255, 0.65); /* Transparent white for dark backgrounds */
-  background-color: rgba(255, 255, 255, 0.08); /* Soft badge-like background */
-  padding: 6px 12px;
-  margin: 4px;
-  border-radius: 999px; /* Pill shape */
-  display: inline-block;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 0.85rem;
-  font-weight: 500;
-  letter-spacing: 0.4px;
-  transition: background-color 0.3s ease;
-}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Projects | Sridhar P</title>
 
-.tech-stack:hover {
-  background-color: rgba(255, 255, 255, 0.15); /* Slightly brighter on hover */
-  cursor: default;
-}
-</style>
-<!-- Font Awesome CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
+<style>
+/* ================= LENIS SMOOTH SCROLL CSS ================= */
+html.lenis { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+body { 
+  overflow-x: hidden; 
+  cursor: none; /* Hide default cursor */
+  background-color: #0f172a;
+}
+
+/* ================= TEXTURE UPGRADE (OPTIMIZED) ================= */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  pointer-events: none;
+  opacity: 0.25; /* Adjusted for static texture */
+  /* Replaced heavy SVG filter with a lightweight Data URI texture */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+/* ================= BACKGROUNDS ================= */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ================= GLASS UI ================= */
+.glass {
+  background: rgba(255,255,255,0.03);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  transform-style: preserve-3d;
+  will-change: transform; /* GPU Hint */
+}
+
+/* ================= COMPONENTS ================= */
+.tech-stack {
+  color: rgba(255,255,255,0.7);
+  background: rgba(255,255,255,0.05);
+  padding: 6px 14px;
+  margin: 4px;
+  border-radius: 999px;
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  border: 1px solid rgba(255,255,255,0.05);
+  transition: all 0.3s ease;
+}
+
+.status {
+  font-size: 0.7rem;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.2); /* Blue tint */
+  color: #93c5fd;
+  border: 1px solid rgba(37, 99, 235, 0.3);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+/* ================= TIMELINE ================= */
+.timeline {
+  position: relative;
+}
+
+.timeline-line {
+  position: absolute;
+  left: 20px; 
+  top: 20px;
+  width: 2px;
+  height: 0%; 
+  background: linear-gradient(to bottom, rgba(59, 130, 246, 0.8), rgba(59, 130, 246, 0.1));
+  z-index: 0;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.4;
+  z-index: -1;
+  will-change: transform; /* GPU Hint */
+}
+
+/* ================= CUSTOM CURSOR ================= */
+.cursor-dot, .cursor-ring {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  will-change: top, left; /* GPU Hint */
+}
+.cursor-dot {
+  width: 8px; height: 8px;
+  background: #60a5fa;
+  border-radius: 50%;
+}
+.cursor-ring {
+  width: 36px; height: 36px;
+  border: 2px solid rgba(96, 165, 250, 0.3);
+  border-radius: 50%;
+}
+.cursor-hover .cursor-ring {
+  transform: scale(1.7);
+  background: rgba(96, 165, 250, 0.1);
+  border-color: rgba(96, 165, 250, 0.6);
+}
+
+</style>
 </head>
-<body class="bg-[#333446] text-white">
 
-  <header class="bg-[#1b2631] p-5 shadow-md">
-    <div class="max-w-6xl mx-auto flex justify-between items-center">
-      <h1 class="text-xl font-bold text-400"style="color:#FAF9F6;">Sridhar P</h1>
-      <a href="index.html" class="text-sm text-gray-300 hover:text-white">← Back to Home</a>
+<body class="text-white grid-bg relative selection:bg-blue-500 selection:text-white">
+
+<div class="grain-overlay"></div>
+
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
+
+<div class="orb w-80 h-80 bg-blue-600 top-20 left-10 blob-1"></div>
+<div class="orb w-96 h-96 bg-purple-600 bottom-40 right-10 blob-2"></div>
+
+<header class="fixed w-full bg-[#0f172a]/70 backdrop-blur-xl border-b border-white/5 z-40 top-0">
+  <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+    <h1 class="text-lg font-bold tracking-wide">Sridhar P.</h1>
+    <a href="index.html" class="text-sm text-gray-400 hover:text-white transition-colors flex items-center gap-2 group">
+      <i class="fas fa-arrow-left group-hover:-translate-x-1 transition-transform"></i> Back to Home
+    </a>
+  </div>
+</header>
+
+<section class="min-h-[50vh] flex items-center justify-center text-center px-6 relative pt-20">
+  <div class="z-10">
+    <h2 class="hero-title text-5xl md:text-6xl font-extrabold mb-6 tracking-tight"></h2>
+    <div class="hero-line mx-auto h-1.5 w-0 bg-blue-500 rounded-full mb-8 shadow-[0_0_20px_rgba(59,130,246,0.5)]"></div>
+    <p class="hero-sub text-lg text-gray-400 max-w-xl mx-auto opacity-0 translate-y-4">
+      Experiments, products, and systems I’ve built while sharpening my craft.
+    </p>
+  </div>
+</section>
+
+<main class="relative max-w-4xl mx-auto px-6 pb-32 space-y-16">
+
+  <div class="timeline-line"></div>
+
+  <div class="project-card glass p-8 rounded-2xl relative md:pl-12 opacity-0 hover-trigger">
+    <div class="absolute -left-3 md:-left-4 top-8 w-8 h-8 bg-[#0f172a] border border-blue-500/50 rounded-full flex items-center justify-center text-blue-400 font-bold text-sm z-10 shadow-[0_0_15px_rgba(59,130,246,0.4)]">
+      1
     </div>
-  </header>
-
-  <main class="max-w-5xl mx-auto py-12 px-4">
-    <h2 class="text-3xl font-bold mb-8 border-b pb-2 border-grey-500"style="color: #FAF9F6;">My Projects</h2>
-
-    <!-- Project 1 -->
-    <div class="mb-10 p-6 bg-[#34495e] rounded-lg shadow hover:shadow-lg transition">
-      <h3 class="text-xl font-semibold mb-2 text-300"style="color: #F3E5AB">ProjectX – Construction Site Report Maker</h3><p>(On Progress)</p>
-      <p class="tech-stack">React.js | Firebase | CameraX API</p>
-      <p class="text-gray-300 mb-2">An app for site engineers to capture work progress using images, notes, GPS, and export them to structured PDFs. Built with React Native and Firebase.</p>
-      <a href="https://github.com/sridharpandiarajan/ProjectX.git" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">View GitHub</a>
+    
+    <div class="flex justify-between items-start mb-4">
+       <span class="text-blue-400 font-mono text-sm tracking-wider">Mobile Engineering</span>
+       <span class="status">Completed</span>
     </div>
 
-    <!-- Project 2 -->
-    <div class="mb-10 p-6 bg-[#34495e] rounded-lg shadow hover:shadow-lg transition">
-      <h3 class="text-xl font-semibold mb-2 text-300"style="color: #F3E5AB">MoodMoji – AI-Powered Mood Tracker</h3>
-      <p class="tech-stack">HTML | CSS | JavaScript</p>
-      <p class="text-gray-300 mb-2">Tracks user mood with emoji selection, history tracking by day/week/month. Includes secure authentication and user-specific storage.</p>
-      <a href="https://github.com/sridharpandiarajan/MoodMoji.git" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">View GitHub</a>
+    <h3 class="text-2xl md:text-3xl font-bold mb-4 text-white group-hover:text-blue-400 transition-colors">
+      InspectPro
+    </h3>
+
+    <div class="mb-6">
+      <span class="tech-stack">Flutter</span>
+      <span class="tech-stack">Hive and Cloud</span>
     </div>
 
-    <!-- Project 3 -->
-    <div class="mb-10 p-6 bg-[#34495e] rounded-lg shadow hover:shadow-lg transition">
-      <h3 class="text-xl font-semibold mb-2 text-300"style="color: #F3E5AB">Doc's Code – Smart Patient Management for Doctors</h3><p>(On Progress)</p>
-      <p class="tech-stack">React.js | Tailwind CSS | Axios(Midware) | Python (Flask) | Supabase</p>
-      <p class="text-gray-300 mb-2">Simplifies patient data entry, tracks visit history, and generates clean prescriptions. Features secure login, redundant database backup, 
-        and a doctor-friendly interface for fast access to records.</p>
-      <a href="https://github.com/sridharpandiarajan/Doc-s-Code.git" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">View GitHub</a>
-    </div>
-  </main>
+    <p class="text-gray-400 mb-6 leading-relaxed max-w-2xl">
+      A field app for engineers to capture work progress with images,
+      GPS metadata, and export structured PDFs for audits. Built to handle low-network environments.
+    </p>
 
-  <footer class="text-center text-sm text-gray-400 py-8">
-    "Like Ilaiyaraaja’s melodies or Kamal's frames, real impact lies in refining the craft - day by day."
-  </footer>
+    <a href="https://github.com/sridharpandiarajan/inspectpro.git"
+       target="_blank"
+       class="inline-flex items-center gap-2 text-white bg-white/10 hover:bg-white/20 px-6 py-2 rounded-lg transition-all text-sm font-medium">
+      <i class="fab fa-github"></i> View Source
+    </a>
+  </div>
+
+  <div class="project-card glass p-8 rounded-2xl relative md:pl-12 opacity-0 hover-trigger">
+    <div class="absolute -left-3 md:-left-4 top-8 w-8 h-8 bg-[#0f172a] border border-green-500/50 rounded-full flex items-center justify-center text-green-400 font-bold text-sm z-10 shadow-[0_0_15px_rgba(34,197,94,0.4)]">
+      2
+    </div>
+
+    <div class="flex justify-between items-start mb-4">
+        <span class="text-green-400 font-mono text-sm tracking-wider">Full Stack System</span>
+        <span class="status !bg-green-500/20 !text-green-300 !border-green-500/30">Completed</span>
+    </div>
+
+    <h3 class="text-2xl md:text-3xl font-bold mb-4 text-white">
+      Doc’s Code
+    </h3>
+
+    <div class="mb-6">
+      <span class="tech-stack">React</span>
+      <span class="tech-stack">NodeJS</span>
+      <span class="tech-stack">MongoDB</span>
+    </div>
+
+    <p class="text-gray-400 mb-6 leading-relaxed max-w-2xl">
+      Doctor-friendly system to manage patient records,
+      prescriptions, and visit history. Includes role-based authentication and secure cloud backups.
+    </p>
+
+    <div class="flex flex-wrap gap-4">
+      <a href="https://docscode.vercel.app"
+         target="_blank"
+         class="inline-flex items-center gap-2 text-white bg-green-500/20 hover:bg-green-500/30 border border-green-500/30 px-6 py-2 rounded-lg transition-all text-sm font-medium group">
+         <i class="fas fa-external-link-alt group-hover:scale-110 transition-transform"></i> Live Demo
+      </a>
+
+      <a href="https://github.com/sridharpandiarajan/DOCSCODE.git"
+         target="_blank"
+         class="inline-flex items-center gap-2 text-white bg-white/10 hover:bg-white/20 px-6 py-2 rounded-lg transition-all text-sm font-medium">
+         <i class="fab fa-github"></i> View Source
+      </a>
+    </div>
+</div>
+  <div class="project-card glass p-8 rounded-2xl relative md:pl-12 opacity-0 hover-trigger">
+    <div class="absolute -left-3 md:-left-4 top-8 w-8 h-8 bg-[#0f172a] border border-purple-500/50 rounded-full flex items-center justify-center text-purple-400 font-bold text-sm z-10 shadow-[0_0_15px_rgba(168,85,247,0.4)]">
+      3
+    </div>
+
+    <div class="flex justify-between items-start mb-4">
+        <span class="text-purple-400 font-mono text-sm tracking-wider">Web Application</span>
+        <span class="status !bg-purple-500/20 !text-purple-300 !border-purple-500/30">Completed</span>
+    </div>
+
+    <h3 class="text-2xl md:text-3xl font-bold mb-4 text-white">
+      MoodMoji
+    </h3>
+
+    <div class="mb-6">
+      <span class="tech-stack">HTML/CSS</span>
+      <span class="tech-stack">Vanilla JS</span>
+    </div>
+
+    <p class="text-gray-400 mb-6 leading-relaxed max-w-2xl">
+      Emoji-based mood tracking with data visualization. Features include local storage persistence, PDF export, and a responsive glassmorphism UI.
+    </p>
+
+    <a href="https://github.com/sridharpandiarajan/MoodMoji.git"
+       target="_blank"
+       class="inline-flex items-center gap-2 text-white bg-white/10 hover:bg-white/20 px-6 py-2 rounded-lg transition-all text-sm font-medium">
+       <i class="fab fa-github"></i> View Source
+    </a>
+  </div>
+
+</main>
+
+
+<footer class="text-center text-sm text-gray-500 py-12 border-t border-white/5">
+  <p class="mb-2">“Like Ilaiyaraaja’s melodies or Kamal’s frames, real impact lies in refining the craft.”</p>
+  <p>© 2025 Sridhar P.</p>
+</footer>
+
+<script>
+/* =================================================================
+   1. LENIS SMOOTH SCROLL (Momentum Scrolling)
+   =================================================================
+*/
+const lenis = new Lenis({
+  duration: 1.2,
+  easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+  direction: 'vertical',
+  gestureDirection: 'vertical',
+  smooth: true,
+  mouseMultiplier: 1,
+  smoothTouch: false,
+  touchMultiplier: 2,
+});
+
+function raf(time) {
+  lenis.raf(time);
+  requestAnimationFrame(raf);
+}
+
+requestAnimationFrame(raf);
+
+
+/* 2. ANIMATIONS (Optimized) */
+
+/* HERO SEQUENCE */
+const heroText = "Selected Works";
+document.querySelector('.hero-title').innerHTML =
+  heroText.split('').map(l => l === ' ' ? '<span style="display:inline-block;width:0.3em"></span>' : `<span style="display:inline-block; opacity:0">${l}</span>`).join('');
+
+const tl = anime.timeline({
+  easing: 'easeOutExpo',
+  duration: 1000
+});
+
+tl.add({
+  targets: '.hero-title span',
+  opacity: [0,1],
+  translateY: [50,0],
+  rotateX: [90, 0],
+  delay: anime.stagger(50),
+})
+.add({
+  targets: '.hero-line',
+  width: ['0px', '100px'],
+  duration: 800
+}, '-=600')
+.add({
+  targets: '.hero-sub',
+  opacity: [0, 1],
+  translateY: [20, 0],
+  duration: 800
+}, '-=600')
+.add({
+  targets: '.timeline-line',
+  height: ['0%', '100%'],
+  duration: 1500,
+  easing: 'easeInOutQuad'
+}, '-=400');
+
+
+/* 3. CARD REVEAL ON SCROLL */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      anime({
+        targets: entry.target,
+        opacity: [0, 1],
+        translateY: [50, 0],
+        scale: [0.95, 1],
+        duration: 800,
+        easing: 'easeOutQuint'
+      });
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.2 });
+
+document.querySelectorAll('.project-card').forEach(card => observer.observe(card));
+
+/* 4. ELASTIC CARD HOVER */
+document.querySelectorAll('.hover-trigger').forEach(card => {
+  card.addEventListener('mouseenter', () => {
+    anime.remove(card);
+    anime({
+      targets: card,
+      scale: 1.02,
+      backgroundColor: 'rgba(255,255,255,0.06)',
+      borderColor: 'rgba(255,255,255,0.2)',
+      duration: 800,
+      easing: 'easeOutElastic(1, .6)'
+    });
+  });
+
+  card.addEventListener('mouseleave', () => {
+    anime.remove(card);
+    anime({
+      targets: card,
+      scale: 1,
+      backgroundColor: 'rgba(255,255,255,0.03)',
+      borderColor: 'rgba(255,255,255,0.08)',
+      duration: 600,
+      easing: 'easeOutElastic(1, .5)'
+    });
+  });
+});
+
+/* 5. TECH PILLS MICRO-INTERACTION */
+document.querySelectorAll('.tech-stack').forEach(tag => {
+  tag.addEventListener('mouseenter', () => {
+    anime({ 
+      targets: tag, 
+      translateY: -3, 
+      backgroundColor: 'rgba(255,255,255,0.15)',
+      duration: 300,
+      easing: 'easeOutQuad'
+    });
+  });
+  tag.addEventListener('mouseleave', () => {
+    anime({ 
+      targets: tag, 
+      translateY: 0, 
+      backgroundColor: 'rgba(255,255,255,0.05)',
+      duration: 300, 
+      easing: 'easeOutQuad' 
+    });
+  });
+});
+
+/* 6. ORB FLOAT */
+anime({
+  targets: '.blob-1',
+  translateY: [0, 40],
+  translateX: [0, 20],
+  direction: 'alternate',
+  loop: true,
+  easing: 'easeInOutSine',
+  duration: 8000
+});
+
+anime({
+  targets: '.blob-2',
+  translateY: [0, -50],
+  translateX: [0, -30],
+  direction: 'alternate',
+  loop: true,
+  easing: 'easeInOutSine',
+  duration: 10000
+});
+
+/* 7. CURSOR LOGIC */
+const dot = document.querySelector('.cursor-dot');
+const ring = document.querySelector('.cursor-ring');
+
+document.addEventListener('mousemove', e => {
+  dot.style.left = `${e.clientX}px`;
+  dot.style.top = `${e.clientY}px`;
+  
+  anime({
+    targets: ring,
+    left: e.clientX - 18,
+    top: e.clientY - 18,
+    duration: 100,
+    easing: 'linear'
+  });
+});
+
+document.querySelectorAll('a, .project-card').forEach(el => {
+  el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+  el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+});
+
+</script>
 
 </body>
 </html>
