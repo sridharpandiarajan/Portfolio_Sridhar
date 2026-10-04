@@ -20,6 +20,9 @@
 .hero-art-column{align-self:center}.hero-art-column>.hero-visual-foot{min-height:32px;padding:9px 4px 0;border-top:1px solid var(--line);font-size:11px;color:#50514c}
 @media(max-width:650px){.hero-art-column{width:min(calc(100% - 24px),390px);max-width:none;margin:52px auto 0;justify-self:center;grid-column:1}.hero-art-column>.hero-visual{width:100%;margin:0}}
 @media(max-width:390px){.hero-art-column{width:calc(100% - 16px)}}
+.arrow-icon{display:inline-block;width:13px;height:13px;flex:none;vertical-align:-.14em;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.arrow-icon-down{transform:rotate(90deg)}.project-links a{display:inline-flex;align-items:center;gap:7px}.hero-float-card .arrow-icon{width:14px;height:14px}
+@media(max-width:650px){.hero-float-card{left:12px;bottom:16px;width:195px}}
+@media(max-width:390px){.hero-float-card{left:12px;bottom:14px;width:175px}}
 .skill-list{display:none}
 .skill-groups{width:100%}
 .skill-group{display:grid;grid-template-columns:165px minmax(0,1fr);gap:22px;align-items:start;padding:22px 0;border-top:1px solid var(--line)}
