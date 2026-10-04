@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="CodeWork logo">
+  <rect width="200" height="200" fill="#10064e"/>
+  <path d="M145 51a68 68 0 1 0 0 98" fill="none" stroke="#66d5f7" stroke-width="19" stroke-linecap="butt"/>
+  <circle cx="100" cy="100" r="16" fill="#66d5f7"/>
+</svg>
